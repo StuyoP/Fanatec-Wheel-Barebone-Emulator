@@ -49,6 +49,6 @@ Here is a simple diagram how to connect the plug Pins to the JST 8pin cable:<br 
 
 <h3>Simplified Diagram</h3>
 This diagram represents the emulator side. It does not have any peripherals - no buttons, displayes, whatsover. You can use all available pins and connect them by your preference:<br />
-![image](diagrams/SimplifiedDiagram.jpg)
+![image](https://github.com/StuyoP/Fanatec-Wheel-Barebone-Emulator/blob/main/diagrams/SimplifiedDiagram.jpg)
 
 
