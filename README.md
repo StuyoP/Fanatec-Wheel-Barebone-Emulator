@@ -53,13 +53,23 @@ Custom plug by Alexbox364 can be found here: [Fanatec Pin Holder](https://www.th
 I miself remixed it to be easier to print and use the new QR2 design - will upload soon.
 
 Here is a simple diagram how to connect the plug Pins to the JST 8pin cable:
-
 ![FWheelEmu_Plug](diagrams/FWheelEmu_Plug.jpg?raw=true)
 
 # Simplified Diagram
 This diagram represents the emulator side. It does not have any peripherals - no buttons, displayes, whatsover. You can use all available pins and connect them by your preference:
-
 ![SimplifiedDiagram](diagrams/SimplifiedDiagram.jpg?raw=true)
+
+# Projects
+Following projects are completed and code for them can be found in the "Projects" folder.
+Some of them utilizes the Keypad Matrix library to minimize pin use: https://github.com/nickgammon/Keypad_Matrix
+
+## RS Clio Rally4 Wheel
+Two button pods with 8 buttons each. Has support for 7Segment display, but still have not built one.
+[RS Clio Rally4 Steering Wheel](sample_wheels/RSClioWheel.jpg?raw=true)
+
+## Ford Puma Rally1 Steering Wheel
+Has 26 buttons, 3 12 position rotaries (6 of the buttons are there), 7Segment Display, aRGB LEDs (for the time being static, did not implement any effects on them). Two thumbsticks both work as directional Funky switch, press on left is fukny press, right is joystic press.
+[Ford Puma Rally1 Wheel](sample_wheels/FordPumaWheel.jpg?raw=true)
 
 
 
