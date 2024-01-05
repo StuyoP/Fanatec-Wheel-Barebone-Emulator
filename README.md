@@ -54,13 +54,12 @@ I miself remixed it to be easier to print and use the new QR2 design - will uplo
 
 Here is a simple diagram how to connect the plug Pins to the JST 8pin cable:
 
-![FWheelEmu_Plug](https://github.com/StuyoP/Fanatec-Wheel-Barebone-Emulator/blob/main/FWheelEmu_Plug.jpg?raw=true)
-<img src=“https://github.com/StuyoP/Fanatec-Wheel-Barebone-Emulator/blob/main/FWheelEmu_Plug.jpg?raw=true” alt=“Subject Pronouns” style=“margin-right: 10px;”/>
+![FWheelEmu_Plug](diagrams/FWheelEmu_Plug.jpg?raw=true)
 
 # Simplified Diagram
 This diagram represents the emulator side. It does not have any peripherals - no buttons, displayes, whatsover. You can use all available pins and connect them by your preference:
 
-![SimplifiedDiagram](https://github.com/StuyoP/Fanatec-Wheel-Barebone-Emulator/assets/98518866/f4e8255f-ecf7-46cf-838a-5286edca4f2f)
+![SimplifiedDiagram](diagrams/SimplifiedDiagram.jpg?raw=true)
 
 
 
