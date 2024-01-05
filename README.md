@@ -45,7 +45,7 @@ I myself decided to go to another direction - switch to barebone ATmega328p chip
 Custom plug by Alexbox364 can be found here: [Fanatec Pin Holder](https://www.thingiverse.com/thing:6271297)<br />
 I miself remixed it to be easier to print and use the new QR2 design - will upload soon.<br />
 Here is a simple diagram how to connect the plug Pins to the JST 8pin cable:<br />
-![FWheelEmu_Plug](https://github.com/StuyoP/Fanatec-Wheel-Barebone-Emulator/blob/093993b4d2263f67b7b30476ddc2c2a8833c2b6b/diagrams/FWheelEmu_Plug.jpg?raw=true)
+![FWheelEmu_Plug](./FWheelEmu_Plug.jpg?raw=true)
 <img src=“https://github.com/StuyoP/Fanatec-Wheel-Barebone-Emulator/blob/093993b4d2263f67b7b30476ddc2c2a8833c2b6b/diagrams/FWheelEmu_Plug.jpg?raw=true” alt=“Subject Pronouns” style=“margin-right: 10px;”/>
 
 <h3>Simplified Diagram</h3>
