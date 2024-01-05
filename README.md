@@ -1,9 +1,11 @@
 # Fanatec-Wheel-Barebone-Emulator
-Berebone Emulator for Fanatec Wheelbase allowing you to create DIY Steering Wheels with full Button, display, LED support.<br />
-This project is quite easy to be built with using standard 70x30mm breadboard, JST-XH 2.54 pitch connector and ATmega238P chip. This keeps price, production time and ease of build to minimum. Also the resulcting emulator has pretty low footprint so it perfectly fits in a Podium Hub Shell, for example.<br />
-I already build several emulators, each with different periferals and custom code.<br />
+Berebone Emulator for Fanatec Wheelbase allowing you to create DIY Steering Wheels with full Button, display, LED support.
 
-<h3>Preface</h3>
+This project is quite easy to be built with using standard 70x30mm breadboard, JST-XH 2.54 pitch connector and ATmega238P chip. This keeps price, production time and ease of build to minimum. Also the resulcting emulator has pretty low footprint so it perfectly fits in a Podium Hub Shell, for example.
+
+I already build several emulators, each with different periferals and custom code.
+
+# Preface</h3>
 This is advanced project, all emulators I build have different code for reason, which will be exlpained later. For connecting different peripherals you will have to decide yourself how to solder the connectors. I will show some examples here, full articke and video will appear at some point on my channel/website. You will need above average soldering and arduino skills to complete your custom project.
 
 <h3>Credits</h3>
