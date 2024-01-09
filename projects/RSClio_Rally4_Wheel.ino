@@ -511,7 +511,7 @@ B
 9(1)    Right Paddle
 10(2) Button 2      (top left, right one)
 11(3)   Button 8      (bottom left, lower)
-12(4)   Left paddle
+12(4)   Left paddle1
 13(5)   Button 1      (top left, left one)
 14(6)   Button 5      (bottom left, higher)
 15(7)   Button 9      (3 buttons in triangle, left)
