@@ -49,9 +49,10 @@ I myself decided to go to another direction - switch to barebone ATmega328p chip
 
 # Custom Fanatec Wheel Plug to JST-XH 2.54pitch Cable
 Custom plug by Alexbox364 can be found here: [Fanatec Pin Holder](https://www.thingiverse.com/thing:6271297)
+
 Podium plug remixed by me: [QR Pin Connector Fanatec](https://diy-sim.com/sim-projects/wheels/item/qr-pin-connector-fanatec)
 
-I miself remixed it to be easier to print and use the new QR2 design - will upload soon.
+I miself remixed it to be easier to print and use the new QR2 design.
 
 Here is a simple diagram how to connect the plug Pins to the JST 8pin cable:
 ![FWheelEmu_Plug](diagrams/FWheelEmu_Plug.jpg?raw=true)
