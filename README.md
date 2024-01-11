@@ -49,6 +49,7 @@ I myself decided to go to another direction - switch to barebone ATmega328p chip
 
 # Custom Fanatec Wheel Plug to JST-XH 2.54pitch Cable
 Custom plug by Alexbox364 can be found here: [Fanatec Pin Holder](https://www.thingiverse.com/thing:6271297)
+Podium plug remixed by me: [QR Pin Connector Fanatec](https://diy-sim.com/sim-projects/wheels/item/qr-pin-connector-fanatec)
 
 I miself remixed it to be easier to print and use the new QR2 design - will upload soon.
 
@@ -70,6 +71,9 @@ Two button pods with 8 buttons each. Has support for 7Segment display, but still
 ## Ford Puma Rally1 Steering Wheel
 Has 26 buttons, 3 12 position rotaries (6 of the buttons are there), 7Segment Display, aRGB LEDs (for the time being static, did not implement any effects on them). Two thumbsticks both work as directional Funky switch, press on left is fukny press, right is joystic press.
 [Ford Puma Rally1 Wheel](sample_wheels/FordPumaWheel.jpg?raw=true)
+
+##4 button wheel
+Nothing special, clean code with only 4 buttons supported - 1 to 4
 
 
 
