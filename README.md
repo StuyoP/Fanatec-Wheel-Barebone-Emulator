@@ -72,8 +72,13 @@ Two button pods with 8 buttons each. Has support for 7Segment display, but still
 Has 26 buttons, 3 12 position rotaries (6 of the buttons are there), 7Segment Display, aRGB LEDs (for the time being static, did not implement any effects on them). Two thumbsticks both work as directional Funky switch, press on left is fukny press, right is joystic press.
 [Ford Puma Rally1 Wheel](sample_wheels/FordPumaWheel.jpg?raw=true)
 
-##4 button wheel
+## 4 button wheel
 Nothing special, clean code with only 4 buttons supported - 1 to 4
+
+# Programming the chip
+Use stnadard Arduino as ISP programming. 
+1. Burn Bootleoader
+2. Burn imnage using "Flash with Programmer"
 
 
 
