@@ -36,21 +36,21 @@ const uint8_t TM_crc[] = {0x39, 0x50, 0x39};
 //#define DISPLAY_CRC8_MISMATCH_ON_ALPHANUMERIC    // use this if you'd like to get a 'CrC' message displayed on the alphanumeric display, each time there's a crc8 mismatch, which means bad SPI communication with the wheelbase. My advice: always keep this commented. If you do have some SPI communication issues, this might help you to know when communication is faulty without looking at the serial monitor.
 //#define DISPLAY_ALPHANUMERIC_DATA_WHEN_MISMATCH_ON_SERIAL  // When getting some (likely broken) alphanumeric text on a packet with mismatched crc8, you might want to view the text on the serial monitor. In that case uncomment this line. (keep this commented to tidy things up)
 
-//#define HAS_ANALOG_DPAD
-//#define DEBUG_ANALOG_DPAD // print the DPAD value on the alphanumeric display. Only relevant if you have an analog dpad, and only when trying to get the DPAD working. once it's working - uncomment this. (Dpad value is always sent to serial monitor)
-
+#define HAS_FUNKY
 #ifdef  HAS_FUNKY
 #define FunkyUP 5
 #define FunkyLEFT 6
 #define FunkyRIGHT 7
 #define FunkyDOWN 8
 #define FunkyOK 9
+int prevFunkyVal = 0;
 #endif
 
+#define HAS_FUNKYENC
 #ifdef  HAS_FUNKYENC
 #include <RotaryEncoder.h>
-#define PIN_IN1 3
-#define PIN_IN2 4
+#define PIN_IN1 4
+#define PIN_IN2 3
 
 // Setup a RotaryEncoder with 4 steps per latch for the 2 signal input pins:
 // RotaryEncoder encoder(PIN_IN1, PIN_IN2, RotaryEncoder::LatchMode::FOUR3);
@@ -66,7 +66,7 @@ RotaryEncoder encoder(PIN_IN1, PIN_IN2, RotaryEncoder::LatchMode::TWO03);
 
 #define HASBUTTONS  // use digital and analog pins for steering wheel buttons. Note: Pins A7 and A6 do not have an internal pullup resistor. Serial data pins: D0, D1. SPI pins: D2, D10, D11, D12, D13. Display Pins: D3, D4. The rest of digital and analog pins can be used for buttons. (also AFAIK A6 and A7 can only be used for analogRead()  )
 #ifdef HASBUTTONS
-#define buttonsnum 1                  // how many buttons are you using?
+#define buttonsnum 2                  // how many buttons are you using?
 uint8_t buttonsPins[] = {  0 ,  1 };    // what arduino pins are you using? 
 uint8_t buttonsBits[] = { 12 ,  9 };    // what bits do you want each button to affect? use the last comment in this file as reference.
 #endif
@@ -75,7 +75,7 @@ uint8_t buttonsBits[] = { 12 ,  9 };    // what bits do you want each button to 
 #ifdef HAS_KEYPAD
 #define keypadnum 16                  // how many buttons are you using?
 uint8_t keypadVal[] = {   0,  1,  2,  3,  4,  5,  6,  7,  8};    // what arduino pins are you using? 
-uint8_t keypadBits[] = {  2,  1,  3,  4,  0,  0,  0,  0,  5};    // what bits do you want each button to affect? use the last comment in this file as reference.
+uint8_t keypadBits[] = {  6,  7,  10,  19,  22,  15,  8,  13,  14};    // what bits do you want each button to affect? use the last comment in this file as reference.
 #endif
 
 uint8_t mosiBuf[dataLength];  // buffer for the incoming data on the mosi line. 
@@ -174,7 +174,7 @@ void setup()
 
   returnData[1] = {0x02}; // for ClubSport Porshe 918 RSR - This is the only option that I'm implementing right now.
         //    {0x01} for BMW M3 GT2, {0x02} for ClubSport FORMULA, (0x04) for Uni hub
-  // Serial.begin(250000);
+   //Serial.begin(250000);
 
 
 #ifdef HAS_TM1637_DISPLAY
@@ -283,23 +283,21 @@ void readButtons() {
 
   int newPos = encoder.getPosition();
   if (pos != newPos) {
-	int EncDir - encoder.getDirection();
+	int EncDir = ((int)(encoder.getDirection()));
 	 if(EncDir == -1){
 		 buttonBitChange(23, true);    // raise the correct 23 button bit
+      delay(2);
 	 }
 	 if(EncDir == 1){
 		 buttonBitChange(24, true);    // raise the correct24 button bit
+     delay(2);
 	 } 
-    Serial.print("pos:");
-    Serial.print(newPos);
-    Serial.print(" dir:");
-    Serial.println(EncDir);
-	
     pos = newPos;
 	}
       else {
         buttonBitChange(23, false);   // drop bit if no encoder rotation detected
         buttonBitChange(24, false);   // drop bit if no encoder rotation detected	
+      delay(2);
       }	
 #endif	
 }
