@@ -1,4 +1,9 @@
 # Fanatec-Wheel-Barebone-Emulator
+
+***Warning*** 
+This project is proven to not be compatible with the new Club Sport DD and DD+ - it seems Arduino is not fast enoughf for the new wheelbases. For everythign up to CSWB2, 25,  CSL DD and DD1/2 it works quite well.
+***
+
 Berebone Emulator for Fanatec Wheelbase allowing you to create DIY Steering Wheels with full Button, display, LED support.
 
 This project is quite easy to be built with using standard 70x30mm breadboard, JST-XH 2.54 pitch connector and ATmega238P chip. This keeps price, production time and ease of build to minimum. Also the resulcting emulator has pretty low footprint so it perfectly fits in a Podium Hub Shell, for example.
@@ -61,9 +66,12 @@ Here is a simple diagram how to connect the plug Pins to the JST 8pin cable:
 This diagram represents the emulator side. It does not have any peripherals - no buttons, displayes, whatsover. You can use all available pins and connect them by your preference:
 ![SimplifiedDiagram](diagrams/SimplifiedDiagram.jpg?raw=true)
 
+# Used Libraries
+Some of my wheels utilizes the Keypad Matrix library to minimize pin use: https://github.com/nickgammon/Keypad_Matrix
+ASCII table to calculate keybapd matrix value: https://web.alfredstate.edu/faculty/weimandn/miscellaneous/ascii/ascii_index.html
+
 # Projects
 Following projects are completed and code for them can be found in the "Projects" folder.
-Some of them utilizes the Keypad Matrix library to minimize pin use: https://github.com/nickgammon/Keypad_Matrix
 
 ## RS Clio Rally4 Wheel
 Two button pods with 8 buttons each. Has support for 7Segment display, but still have not built one.
