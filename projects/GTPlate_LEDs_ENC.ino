@@ -1,6 +1,9 @@
 #include "pins_arduino.h" 
 #include <avr/pgmspace.h>
 
+void yield_F();                         // function that run time essential sub-fonctions to avoid code blocking by long-time executing other ones. For example intterupt routines have to be run frequently enough
+
+
 #define HAS_KEYPAD  // comment out if you're not using a Keypad Matrix for Buttons
 #ifdef  HAS_KEYPAD
 #include <Keypad_Matrix.h> //Library to support Matrix Keypad
@@ -48,20 +51,22 @@ CRGB leds[NUM_LEDS];
 
 #define HAS_ENC
 #ifdef  HAS_ENC
-#include <Encoder.h>
-#define ENC1_IN1 5
-#define ENC1_IN2 6
-#define ENC2_IN1 7
-#define ENC2_IN2 8
+#define ENC_1_A_PIN 5
+#define ENC_1_B_PIN 6
+#define ENC_2_A_PIN 7
+#define ENC_2_B_PIN 8
 
-// create a number of encoder objects initialized with their pins
-Encoder enc1( ENC1_IN1, ENC1_IN2 );
-Encoder enc2( ENC2_IN1, ENC2_IN2 );
+    // Encoders management variables
+     bool A_1_set = false;   
+     bool B_1_set = false;
+     bool A_2_set = false;   
+     bool B_2_set = false;
+    
+    int encoderPos_1 = 0;
+    int encoderPos_2 = 0;
+    int old_encoderPos_1 = 0;
+    int old_encoderPos_2 = 0;
 
-// put their references in an array
-Encoder *encoderArray[] = { &encoder1, &encoder2 };
-int enc1pos = 0;
-int enc2pos = 0;
 #endif
 
 
@@ -171,8 +176,10 @@ void setup()
 
 #ifdef  HAS_ENC
 {
-  // start the encoder time interrupts
-  EncoderInterrupt.begin( encoderArray, 2 );
+    pinMode(ENC_1_A_PIN, INPUT_PULLUP);
+    pinMode(ENC_1_B_PIN, INPUT_PULLUP);
+    pinMode(ENC_2_A_PIN, INPUT_PULLUP);
+    pinMode(ENC_2_B_PIN, INPUT_PULLUP);
 }
 #endif
 
@@ -225,55 +232,55 @@ ISR(SPI_STC_vect)       // Note: this routine takes 6 us, and happens once 8 bit
 
 void loop() {
   readSerial();
-//Put it in the main loop to ensure fastest possible runtime as we need constant encoder monitoring to detect rotations  
-#ifdef HAS_ENC
-  // read the debounced value of the encoder buttons
-  bool pb1 = encoder1.button();
-  bool pb2 = encoder2.button();
-
-  // get the encoder 1 delta (can be positive or negative)
-  int deltaValue1 = encoder1.delta();
-  
-  if (deltaValue1 != 0) {
-	 if(deltaValue1 == -1){
-		 buttonBitChange(23, true);    // raise the correct 23 button bit
-	 }
-	 if(deltaValue1 == 1){
-		 buttonBitChange(24, true);    // raise the correct24 button bit
-	 } 
-    enc1pos += delta1;
-	Serial.print (F("ENC1: "));Serial.println (enc1pos);
-	}
-      else {
-        buttonBitChange(23, false);   // drop bit if no encoder rotation detected
-        buttonBitChange(24, false);   // drop bit if no encoder rotation detected	
-      }	
-	  
-  // get the encoder 2 delta (can be positive or negative)
-  int deltaValue1 = encoder1.delta();
-  
-  if (deltaValue2 != 0) {
-	 if(deltaValue2 == -1){
-		 buttonBitChange(17, true);    // raise the correct 23 button bit
-	 }
-	 if(deltaValue2 == 1){
-		 buttonBitChange(18, true);    // raise the correct24 button bit
-	 } 
-    enc2pos += delta2;
-	Serial.print (F("ENC2: "));Serial.println (enc2pos);
-	}
-      else {
-        buttonBitChange(17, false);   // drop bit if no encoder rotation detected
-        buttonBitChange(18, false);   // drop bit if no encoder rotation detected
-      }		  
-#endif
-	  
   readButtons();
   calcOutgoingCrc();
   printButtonByteToSerial();
   bool crc8Stat = checkIncomingCrc();
   refreshAlphanumericDisplays(crc8Stat);
+    // For test purposes
+    //test_leds();  
 }
+
+/////////////////////////////////////////////
+// test LED output of the wheel
+void test_leds() {
+    
+    int index = millis()/1000 % 9;
+    switch (index) {
+        case 0:
+            mosiBuf[5] = 0b00000000;
+            break;
+        case 1:
+            mosiBuf[5] = 0b00000001;
+            break;
+        case 2:
+            mosiBuf[5] = 0b00000011;
+            break;
+        case 3:
+            mosiBuf[5] = 0b00000111;
+            break;
+        case 4:
+            mosiBuf[5] = 0b00001111;
+            break;
+        case 5:
+            mosiBuf[5] = 0b00011111;
+            break;
+        case 6:
+            mosiBuf[5] = 0b00111111;
+            break;
+        case 7:
+            mosiBuf[5] = 0b01111111;
+            break;
+        case 8:
+            mosiBuf[5] = 0b11111111;
+            break;
+        case 9:
+            mosiBuf[6] = 0b00000001;
+            break;
+        
+    }
+}    
+
 
 void keyDown (const char which)
   {
@@ -310,23 +317,59 @@ void readButtons() {
 #ifdef HAS_KEYPAD
    kpd.scan (); //scan for which Key is pressed
 #endif
+
+        #ifdef HAS_ENC
+        if(digitalRead(ENC_1_A_PIN) != A_1_set ) {                    // debounce once more
+            A_1_set = !A_1_set;
+            if ( A_1_set && !B_1_set ) {                              // adjust counter +1 if A leads B
+                    encoderPos_1 += 1;
+                    if (BUTTON_DEBUG ==1) {Serial.print("Encoder 1 ++ : "); Serial.println(encoderPos_1); }
+            }
+        }
+        if(digitalRead(ENC_1_B_PIN) != B_1_set ) {
+            B_1_set = !B_1_set;
+            if( B_1_set && !A_1_set ) {                               //  adjust counter - 1 if B leads A
+                    encoderPos_1 -= 1;
+                    if (BUTTON_DEBUG ==1) {Serial.print("Encoder 1 -- : "); Serial.println(encoderPos_1); }
+            }
+        }
+
+
+        if(digitalRead(ENC_2_A_PIN) != A_2_set ) {                    // debounce once more
+            A_2_set = !A_2_set;
+            if ( A_2_set && !B_2_set ) {                              // adjust counter +1 if A leads B
+                    encoderPos_2 += 1;
+                    if (BUTTON_DEBUG ==1) {Serial.print("Encoder 2 ++ : ");  Serial.println(encoderPos_2); }
+            }
+        }
+        if(digitalRead(ENC_2_B_PIN) != B_2_set ) {
+            B_2_set = !B_2_set;
+            if( B_2_set && !A_2_set ) {                               //  adjust counter - 1 if B leads A
+                    encoderPos_2 -= 1;
+                    if (BUTTON_DEBUG ==1) {Serial.print("Encoder 2 -- : ");  Serial.println(encoderPos_2); }
+            }
+        }
+        #endif
+        
 }
 
 void buttonBitChange(uint8_t buttonBit, bool bitOn) {
     // changes a selected bit in one of the 3 button bytes to either on (1) or off (0). Valid values for buttonBit is 1 to 24. See buttons list in last comment.
         if (bitOn) {
             if (buttonBit < 23) returnData[2 + ((buttonBit - 1) / 8)] |= (1 << (((buttonBit - 1) % 8)));
-        else {
-            returnData[7] |= (1 << (30-buttonBit));
-            //returnData[7] |= (1 << (24-buttonBit));
-        }
+			if (buttonBit == 23 || buttonBit == 24) returnData[7] |= (1 << (30-buttonBit));     //Change Encoder bit value to Up or Down;
+			if (buttonBit == 25) returnData[6] = 0;			//Set Y-Axis to UP
+			if (buttonBit == 26) returnData[6] = 255;		//Set Y-Axis to Down
+			if (buttonBit == 27) returnData[5] = 0;			//Set X-Axis to Left
+			if (buttonBit == 28) returnData[5] = 255;		//Set X-Axis to Right		
         }
         else {
             if (buttonBit < 23) returnData[2 + ((buttonBit - 1) / 8)] &= ~(1 << (((buttonBit - 1) % 8)));
-        else {
-            returnData[7] &= ~(1 << (30-buttonBit));
-            //returnData[7] &= ~(1 << (24-buttonBit));
-        }
+			if (buttonBit == 23 || buttonBit == 24)returnData[7] &= ~(1 << (30-buttonBit)); 	//Reset Encoder Value;
+			if (buttonBit == 25) returnData[6] = 128;		//Reset Y-Axis to MID
+			if (buttonBit == 26) returnData[6] = 128;		//Reset Y-Axis to MID
+			if (buttonBit == 27) returnData[5] = 128;		//Reset X-Axis to MID
+			if (buttonBit == 28) returnData[5] = 128;		//Reset X-Axis to MID
         }
 }
 
@@ -441,69 +484,52 @@ void refreshAlphanumericDisplays(bool crc8Stat) {
 #ifdef LEDS
     if (crc8Stat) {                            // Only refresh the LEDS if the current packet is intact (has proper crc8 attached to it) {
 
-        LEDS1[] = mosiBuf[5];
-        LEDS2[] = mosiBuf[6];
-
-	  bool led1 = bitRead(LEDS1,0);
-      bool led2 = bitRead(LEDS1,1);
-      bool led3 = bitRead(LEDS1,2);
-      bool led4 = bitRead(LEDS1,3);
-      bool led5 = bitRead(LEDS1,4);
-      bool led6 = bitRead(LEDS1,5);
-      bool led7 = bitRead(LEDS1,6);
-      bool led8 = bitRead(LEDS1,7);
-      bool led9 = bitRead(LEDS2,0);
+ 	  bool led1 = bitRead(mosiBuf[5],0);
+      bool led2 = bitRead(mosiBuf[5]);
+      bool led3 = bitRead(mosiBuf[5],2);
+      bool led4 = bitRead(mosiBuf[5],3);
+      bool led5 = bitRead(mosiBuf[5],4);
+      bool led6 = bitRead(mosiBuf[5],5);
+      bool led7 = bitRead(mosiBuf[5],6);
+      bool led8 = bitRead(mosiBuf[5],7);
+      bool led9 = bitRead(mosiBuf[6],0);
 	  
 	        // LED 1
-      if (led1) { strip.setPixelColor(0, strip.Color(0, 0, 255));}
-      else {      strip.setPixelColor(0, strip.Color(0, 0, 0));}
+      if (led1) { leds[0] = CRGB::YellowGreen; FastLED.show();}
+      else {      leds[0] = CRGB::YellowGreen; FastLED.show();}
 
       // LED 2
-      if (led2) { strip.setPixelColor(1, strip.Color(0, 0, 255));}
-      else {      strip.setPixelColor(1, strip.Color(0, 0, 0));}
+      if (led2) { leds[1] = CRGB::Green; FastLED.show();}
+      else {      leds[1] = CRGB::Green; FastLED.show();}
 
       // LED 3
-      if (led3) { strip.setPixelColor(2, strip.Color(0, 0, 255));}
-      else {      strip.setPixelColor(2, strip.Color(0, 0, 0));}
+      if (led3) { leds[2] = CRGB::Yellow; FastLED.show();}
+      else {      leds[2] = CRGB::Yellow; FastLED.show();}
 
       // LED 4
-      if (led4) { strip.setPixelColor(3, strip.Color(0, 255, 0));}
-      else {      strip.setPixelColor(3, strip.Color(0, 0, 0));}
+      if (led4) { leds[3] = CRGB::Red; FastLED.show();}
+      else {      leds[3] = CRGB::Red; FastLED.show();}
 
       // LED 5
-      if (led5) { strip.setPixelColor(4, strip.Color(0, 255, 0));}
-      else {      strip.setPixelColor(4, strip.Color(0, 0, 0));}
+      if (led5) { leds[4] = CRGB::Teal; FastLED.show();}
+      else {      leds[4] = CRGB::Teal; FastLED.show();}
 
       // LED 6
-      if (led6) { strip.setPixelColor(5, strip.Color(0, 255, 0));}
-      else {      strip.setPixelColor(5, strip.Color(0, 0, 0));}
+      if (led6) { leds[5] = CRGB::Teal; FastLED.show();}
+      else {      leds[5] = CRGB::Teal; FastLED.show();}
 
       // LED 7
-      if (led7) { strip.setPixelColor(6, strip.Color(255, 255, 0));}
-      else {      strip.setPixelColor(6, strip.Color(0, 0, 0));}
+      if (led7) { leds[6] = CRGB::Yellow; FastLED.show();}
+      else {      leds[6] = CRGB::Yellow; FastLED.show();}
 
       // LED 8
-      if (led8) { strip.setPixelColor(7, strip.Color(255, 255, 0));}
-      else {      strip.setPixelColor(7, strip.Color(0, 0, 0));}
+      if (led8) { leds[7] = CRGB::Green; FastLED.show();}
+      else {      leds[7] = CRGB::Green; FastLED.show();}
 
       // LED 9
-      if (led9) { strip.setPixelColor(8, strip.Color(255, 0, 0));}
-      else {      strip.setPixelColor(8, strip.Color(0, 0, 0));}
+      if (led9) { leds[8] = CRGB::Red; FastLED.show();}
+      else {      leds[8] = CRGB::Red; FastLED.show();}
         
-  leds[0] = CRGB::YellowGreen; FastLED.show(); 
-  leds[1] = CRGB::Green; FastLED.show();
-  leds[2] = CRGB::Yellow; FastLED.show();
-  leds[3] = CRGB::Red; FastLED.show();
-  leds[4] = CRGB::Teal; FastLED.show();
-  leds[5] = CRGB::Teal; FastLED.show(); 
-  leds[6] = CRGB::Yellow; FastLED.show();
-  leds[7] = CRGB::Green; FastLED.show();
-  leds[8] = CRGB::Red; FastLED.show();
-  leds[9] = CRGB::Purple; FastLED.show();
-  leds[10] = CRGB::White; FastLED.show(); 
-  leds[11] = CRGB::Red; FastLED.show();
-		
-      strip.show();
     
       /*Serial.print("LEDs : ");
       Serial.print(led1);
