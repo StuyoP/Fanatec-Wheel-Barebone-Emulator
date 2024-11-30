@@ -85,9 +85,15 @@ Has 26 buttons, 3 12 position rotaries (6 of the buttons are there), 7Segment Di
 Nothing special, clean code with only 4 buttons supported - 1 to 4
 
 # Programming the chip
-Use stnadard Arduino as ISP programming. 
-1. Burn Bootleoader
-2. Burn imnage using "Flash with Programmer"
+Use stnadard Arduino as ISP programming (you need to flashanother Arduino with the sample ISP sketch):
+1. Flash the default ISP sketch to an Arduino Uno
+2. Build the flashing circuit
+3. Burn Bootleoader using "Arduino as ISP" programmer
+4. Burn imnage using "Flash with Programmer" (it is in the Sketch menu or Shift+Upload button)
 
-
-
+Good sources to learn how to do it:
+https://docs.arduino.cc/built-in-examples/arduino-isp/ArduinoISP/
+https://www.youtube.com/watch?v=YO61YCaC9DY
+https://www.youtube.com/watch?v=Sww1mek5rHU
+https://dronebotworkshop.com/arduino-uno-atmega328/
+https://www.instructables.com/Flash-the-Arduino-Bootloader-on-an-ATMega328-1/
