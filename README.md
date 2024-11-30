@@ -91,7 +91,7 @@ Use stnadard Arduino as ISP programming (you need to flashanother Arduino with t
 3. Burn Bootleoader using "Arduino as ISP" programmer
 4. Burn imnage using "Flash with Programmer" (it is in the Sketch menu or Shift+Upload button)
 
-Good sources to learn how to do it:
+Good sources to learn how to do it:\n
 https://docs.arduino.cc/built-in-examples/arduino-isp/ArduinoISP/
 https://www.youtube.com/watch?v=YO61YCaC9DY
 https://www.youtube.com/watch?v=Sww1mek5rHU
