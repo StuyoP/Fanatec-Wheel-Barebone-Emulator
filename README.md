@@ -91,9 +91,9 @@ Use stnadard Arduino as ISP programming (you need to flashanother Arduino with t
 3. Burn Bootleoader using "Arduino as ISP" programmer
 4. Burn imnage using "Flash with Programmer" (it is in the Sketch menu or Shift+Upload button)
 
-Good sources to learn how to do it:<\br>
-https://docs.arduino.cc/built-in-examples/arduino-isp/ArduinoISP/<\br>
-https://www.youtube.com/watch?v=YO61YCaC9DY<\br>
-https://www.youtube.com/watch?v=Sww1mek5rHU<\br>
-https://dronebotworkshop.com/arduino-uno-atmega328/<\br>
+Good sources to learn how to do it:<br />
+https://docs.arduino.cc/built-in-examples/arduino-isp/ArduinoISP/<br />
+https://www.youtube.com/watch?v=YO61YCaC9DY<br />
+https://www.youtube.com/watch?v=Sww1mek5rHU<br />
+https://dronebotworkshop.com/arduino-uno-atmega328/<br />
 https://www.instructables.com/Flash-the-Arduino-Bootloader-on-an-ATMega328-1/
